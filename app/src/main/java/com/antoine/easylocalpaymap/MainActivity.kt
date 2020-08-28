@@ -2,39 +2,39 @@ package com.antoine.easylocalpaymap
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.antoine.easylocalpaymap.model.AuthKey
-import com.antoine.easylocalpaymap.model.LocalPayPlace
-import com.antoine.easylocalpaymap.model.service.OpenDataService
+import com.antoine.easylocalpaymap.model.data.LocalPayPlace
+import com.antoine.easylocalpaymap.model.service.LocalPlaceRepository
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Callback<LocalPayPlace> {
 
-    private lateinit var retrofit: Retrofit
-    private lateinit var service: OpenDataService
+    private val model: LocalPlaceRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        retrofit = Retrofit.Builder()
-            .baseUrl("https://openapi.gg.go.kr/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        btnTest.setOnClickListener {
+            model.getOlaceList("1","1","용인시","기흥구 죽전로","").enqueue(this)
+//            GlobalScope.launch(Dispatchers.Main){
+//                val response = model.getOlaceList("1","1","용인시","기흥구 죽전로","")
+//                TODO("Not yet implemented")
+//            }
+        }
+    }
 
-        service = retrofit.create(OpenDataService::class.java)
+    override fun onFailure(call: Call<LocalPayPlace>, t: Throwable) {
+        TODO("Not yet implemented")
+    }
 
-        service.getPlaceList(AuthKey.KEY, "json","1","1","용인시","기흥구 죽전로","").enqueue(object : Callback<LocalPayPlace>{
-            override fun onFailure(call: Call<LocalPayPlace>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onResponse(call: Call<LocalPayPlace>, response: Response<LocalPayPlace>) {
-                TODO("Not yet implemented")
-            }
-        })
+    override fun onResponse(call: Call<LocalPayPlace>, response: Response<LocalPayPlace>) {
+        TODO("Not yet implemented")
     }
 }

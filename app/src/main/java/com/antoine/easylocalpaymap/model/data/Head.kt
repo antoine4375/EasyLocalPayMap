@@ -1,4 +1,4 @@
-package com.antoine.easylocalpaymap.model
+package com.antoine.easylocalpaymap.model.data
 
 
 import com.google.gson.annotations.SerializedName
